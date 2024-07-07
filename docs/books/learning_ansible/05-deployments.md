@@ -126,38 +126,37 @@ Technical considerations:
 
 Our playbook to configure the server: `playbook-config-server.yml`
 
-```bash
+```yaml
 ---
-- hosts: ansible_clients
-  become: yes
+- hosts: all
+  become: true
   become_user: root
   vars:
-    dest: "/var/www/site/"
+    dest: /var/www/site/
     apache_global_vhost_settings: |
       DirectoryIndex index.php index.htm
     apache_vhosts:
-      - servername: "website"
- documentroot: "{{ dest }}current/html"
+      - servername: website
+    documentroot: "{{ dest }}current/html"
 
   tasks:
+    - name: Create directory for website
+      ansible.builtin.file:
+        path: /var/www/site/
+        state: directory
+        mode: "0755"
 
-    - name: create directory for website
-      file:
- path: /var/www/site/
- state: directory
- mode: 0755
+    - name: Install git
+      ansible.builtin.package:
+        name: git
+        state: latest
 
-    - name: install git
-      package:
- name: git
- state: latest
-
-    - name: permit traffic in default zone for http service
+    - name: Permit traffic in default zone for http service
       ansible.posix.firewalld:
- service: http
- permanent: yes
- state: enabled
- immediate: yes
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
 
   roles:
     - { role: geerlingguy.apache }
@@ -343,7 +342,7 @@ The `ansistrano_keep_releases` variable is used to specify the number of release
 
 * Using the `ansistrano_keep_releases` variable, keep only 3 releases of the project. Check.
 
-```bash
+```yaml
 ---
 - hosts: ansible_clients
   become: yes
@@ -391,7 +390,7 @@ $ tree /var/www/site/
 
 ### Using shared_paths and shared_files
 
-```bash
+```yaml
 ---
 - hosts: ansible_clients
   become: yes
@@ -487,31 +486,37 @@ Don't forget to modify the Apache configuration to take into account this change
 
 Change the playbook for the server configuration `playbook-config-server.yml`
 
-```bash
+```yaml
 ---
-- hosts: ansible_clients
-  become: yes
+- hosts: all
+  become: true
   become_user: root
   vars:
-    dest: "/var/www/site/"
+    dest: /var/www/site/
     apache_global_vhost_settings: |
       DirectoryIndex index.php index.htm
     apache_vhosts:
-      - servername: "website"
- documentroot: "{{ dest }}current/" # <1>
+      - servername: website
+    documentroot: "{{ dest }}current/" # <1>
 
   tasks:
+    - name: Create directory for website
+      ansible.builtin.file:
+        path: /var/www/site/
+        state: directory
+        mode: "0755"
 
-    - name: create directory for website
-      file:
- path: /var/www/site/
- state: directory
- mode: 0755
+    - name: Install git
+      ansible.builtin.package:
+        name: git
+        state: latest
 
-    - name: install git
-      package:
- name: git
- state: latest
+    - name: Permit traffic in default zone for http service
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
 
   roles:
     - { role: geerlingguy.apache }
@@ -521,7 +526,7 @@ Change the playbook for the server configuration `playbook-config-server.yml`
 
 Change the playbook for the deployment `playbook-deploy.yml`
 
-```bash
+```yaml
 ---
 - hosts: ansible_clients
   become: yes
@@ -588,7 +593,7 @@ The `ansistrano_git_branch` variable is used to specify a `branch` or `tag` to d
 
 * Deploy the `releases/v1.1.0` branch:
 
-```bash
+```yaml
 ---
 - hosts: ansible_clients
   become: yes
@@ -629,7 +634,7 @@ $ curl http://192.168.1.11
 
 * Deploy the `v2.0.0` tag:
 
-```bash
+```yaml
 ---
 - hosts: ansible_clients
   become: yes
@@ -685,7 +690,7 @@ A playbook can be included through the variables provided for this purpose:
 
 * Easy example: send an email (or whatever you want like Slack notification) at the beginning of the deployment:
 
-```bash
+```yaml
 ---
 - hosts: ansible_clients
   become: yes
@@ -711,7 +716,7 @@ A playbook can be included through the variables provided for this purpose:
 
 Create the file `deploy/before-setup-tasks.yml`:
 
-```bash
+```yaml
 ---
 - name: Send a mail
   mail:
@@ -736,7 +741,7 @@ Heirloom Mail version 12.5 7/5/10.  Type ? for help.
 
 * You will probably have to restart some services at the end of the deployment, to flush caches for example. Let's restart Apache at the end of the deployment:
 
-```bash
+```yaml
 ---
 - hosts: ansible_clients
   become: yes
@@ -763,7 +768,7 @@ Heirloom Mail version 12.5 7/5/10.  Type ? for help.
 
 Create the file `deploy/after-symlink-tasks.yml`:
 
-```bash
+```yaml
 ---
 - name: restart apache
   systemd:
