@@ -153,8 +153,10 @@ kopia snapshot create $HOME
 
 Below is the output of the created snapshot:
 
->_**{user}**@**{hostname}**:**/{directory}**_<br>
->**{CREATIONDATE}** - **{{SNAPSHOT ID}}** - **{{SIZE}}** - **{{PERMISSIONS}}**
+???+ info "Information Layout"
+
+    _**{user}**@**{hostname}**:**/{directory}**_<br>
+    **{CREATIONDATE}** - **{{SNAPSHOT ID}}** - **{{SIZE}}** - **{{PERMISSIONS}}**
 
 ```bash title="output"
 [root@rockytest ~]# kopia snapshot ls
@@ -196,14 +198,67 @@ kopia content show  kf652ba8cf935331461506477ecd8bf3a -j
 
 ## Configuring your repository policy
 
-Let's look at out current policy
+Before diving into configuring your repository policies, you must first understand the policy settings and how they can be applied.
+
+Policy settings can be applied to the following entities:
+
+| Entity     | Level     |
+| ------------- | ------------- |
+| user@host | root@rockytest |
+| @host | @rockytest |
+| user@host:path | root@rockytest:/root |
+| local path | /.kopia_backups |
+| -global | global configuration |
 
 ```bash
-kopia policy list
-```
+[root@rockytest ~]# kopia policy show /.kopia_backups
+Policy for root@rockytest:/.kopia_backups:
 
-```bash
+Retention:
+  Annual snapshots:                     3   inherited from (global)
+  Monthly snapshots:                   24   inherited from (global)
+  Weekly snapshots:                     4   inherited from (global)
+  Daily snapshots:                      7   inherited from (global)
+  Hourly snapshots:                    48   inherited from (global)
+  Latest snapshots:                    10   inherited from (global)
+  Ignore identical snapshots:       false   inherited from (global)
 
+Files policy:
+  Ignore cache directories:          true   inherited from (global)
+  No ignore rules:
+  Read ignore rules from files:             inherited from (global)
+    .kopiaignore
+  Scan one filesystem only:         false   inherited from (global)
+
+Error handling policy:
+  Ignore file read errors:          false   inherited from (global)
+  Ignore directory read errors:     false   inherited from (global)
+  Ignore unknown types:              true   inherited from (global)
+
+Scheduling policy:
+  Scheduled snapshots:
+    None.
+  Manual snapshot:                  false   inherited from (global)
+
+Uploads:
+  Max parallel snapshots (server/UI):   1   inherited from (global)
+  Max parallel file reads:              -   inherited from (global)
+  Parallel upload above size:      2.1 GB   inherited from (global)
+
+Compression disabled.
+
+No actions defined.
+
+OS-level snapshot support:
+  Volume Shadow Copy:               never   inherited from (global)
+
+Logging details (0-none, 10-maximum):
+  Directory snapshotted:                5   inherited from (global)
+  Directory ignored:                    5   inherited from (global)
+  Entry snapshotted:                    0   inherited from (global)
+  Entry ignored:                        5   inherited from (global)
+  Entry cache hit:                      0   inherited from (global)
+  Entry cache miss:                     0   inherited from (global)
 ```
 
 ## Configuring the global policy
