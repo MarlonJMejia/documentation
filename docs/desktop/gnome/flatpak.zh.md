@@ -4,49 +4,49 @@ author: Steven Spencer
 contributors: Ganna Zhyrnova
 ---
 
-## Introduction
+## 简介
 
-Citation à partir du site Web du projet :
+来自项目官网:
 
-> Flatpak est un framework permettant de distribuer des applications de bureau sur diverses distributions Linux. Il a été créé par des développeurs qui ont une longue expérience sur Linux-Desktop et est exécuté comme un projet open source indépendant.
+> Flatpak是一个框架，用于跨平台支持各种Linux发行版分发桌面应用程序。 它是由在Linux桌面上有着悠久工作历史的开发人员创建的，并作为一个独立的开源项目运行。
 
-Flatpak est installé par défaut lors de l'installation de Rocky Linux avec des sélections de logiciels incluant GNOME (« Server with GUI » ou « Workstation »). Une installation manuelle est également possible (voir procédure incluse). C'est un excellent moyen de peupler votre environnement de bureau avec des outils que vous souhaitez utiliser.
+Flatpak会在安装Rocky Linux系统时默认被安装，其中就包括GNOME(“带GUI的服务器”或“工作站”)。 也可以手动安装。 (请参考下面的手动安装过程) 这是一种当你想要使用工具自定义桌面环境的好方法。
 
-## Installation Manuelle
+## 手动安装
 
-!!! note "Remarque"
+!!! note "注意"
 
 ```
-Vous pouvez ignorer cette étape si vous exécutez déjà l'environnement de bureau GNOME complet décrit dans l'introduction.
+如果你已经在运行完整的GNOME桌面环境，则可以跳过此步骤。
 ```
 
-Installer Flatpak comme suit :
+使用下面的命令安装 Flatpak:
 
 ```bash
 sudo dnf install flatpak
 ```
 
-Ajouter le dépôt Flatpak :
+添加 Flatpak 仓库
 
 ```bash
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 ```
 
-Redémarrez le système :
+重启系统
 
 ```bash
 sudo shutdown -r now
 ```
 
-## Les commandes de Flatpak
+## Flatpak 命令
 
-Pour afficher une liste de toutes les commandes Flatpak disponibles :
+查看所有 Flatpak 可用命令:
 
 ```bash
 flatpak --help
 ```
 
-Cela devrait afficher le résultat suivant :
+输出结果如下:
 
 ```text
 Usage:
@@ -125,18 +125,17 @@ Application Options:
   --ostree-verbose        Show OSTree debug information
 ```
 
-Mémoriser la liste des commandes n'est pas nécessaire, mais savoir comment y accéder et utiliser l'option `--help` est essentiel.
+没必要记住所有命令列表，知道如何进入列表并使用选项 `--help` 即可。
 
-!!! warning "Avertissement"
+!!! warning "警告"
 
 ````
-If you are on a version of Rocky Linux 9.x, you will experience this bug. When running the command:
+如果使用的是RockyLinux9.x版本，运行命令时可能遇到下面的问题：
 
 ```bash
 flatpak search [packagename]
 ```
-
-Where [packagename] is the package you are looking for, you will get:
+其中[packagename]是要查找的软件包，将返回：
 
 ```text
 F: Failed to parse /var/lib/flatpak/appstream/flathub/x86_64/active/appstream.xml.gz file: Error on line 4065 char 29: <p> already set '
@@ -147,30 +146,30 @@ F: Failed to parse /var/lib/flatpak/appstream/flathub/x86_64/active/appstream.xm
 No matches found
 ```
 
-There is no workaround for this. To avoid the error, use the Flathub resource in this document to obtain and install the desired package.
+对此没有解决方法。为了避免出现错误，请使用本文档中的Flathub资源获取并安装所需的软件包。
 ````
 
 ## Flathub
 
-`Flathub` est une ressource Web permettant d'obtenir ou de soumettre des packages de bureau.
+Flatchub是一个用于获取或提交桌面软件包的web资源网站。
 
-Pour parcourir `Flathub`, veuillez consulter https://flathub.org/. Une énorme liste de packages de bureau sélectionnés existe ici, joliment divisés en catégories.
+要访问 Flathub, 查看 https://flathub.org/. 这里有非常多用心整理的桌面软件包，它们被很好地划分为不同的类别。
 
-## Intégration de Flathub avec Flatpak
+## Flathub 对接 Flatpak
 
-À titre d'exemple, la marche à suivre pour l'installation d'OBS Studio est la suivante :
+比如, 安装 OBS Studio 的过程如下:
 
-1. Ouvrez la section "Audio & Vidéo" sur Flathub
+1. 在 Flathub 进入 "Audio & Video" 选项
 
-2. Sélectionnez « OBS Studio » dans la liste
+2. 从列表中找到 "OBS Studio"
 
-3. Cliquez sur la flèche vers le bas à côté du bouton « Install »
+3. 单击“Install”安装按钮旁边的向下箭头
 
    ![flathub\_install\_1](images/01_flatpak.png)
 
    ![flathub\_install\_2](images/02_flatpak.png)
 
-4. Assurez-vous d'avoir rempli toutes les conditions préalables à l'installation de Rocky Linux (numéro 1 dans la deuxième image, qui est déjà complété ci-dessus), puis copiez la commande (numéro 2 dans la deuxième image) et collez-la dans un terminal
+4. 确保已经安装了Rocky Linux需要的所有必备依赖(第二个图片中的数字1所指向的内容，上面已经完成)，然后复制命令(第二图片中的数字2所指向的内容) 并将其粘贴到终端中
 
    ```bash
    flatpak install flathub com.obsproject.Studio
@@ -179,7 +178,7 @@ Pour parcourir `Flathub`, veuillez consulter https://flathub.org/. Une énorme l
    Do you want to install it? [Y/n]: Y
    ```
 
-5. Lorsque vous répondez « Y » et appuyez sur ++enter++, vous verrez ce qui suit :
+5. 当你回答 "Y" 并点击 ++enter++ 键的时候, 你将看到类似下面的输出:
 
    ```bash
    com.obsproject.Studio permissions:
@@ -204,25 +203,25 @@ Pour parcourir `Flathub`, veuillez consulter https://flathub.org/. Une énorme l
    Proceed with these changes to the system installation? [Y/n]:
    ```
 
-6. Répondre « Y » et appuyer sur ++enter++ modifiera les autorisations du système comme indiqué et installera l'application.
+6. 回答 "Y" 并点击 ++enter++ 键将按提示修改系统权限并安装应用.
 
-7. Si tout se passe bien, vous devriez obtenir le message suivant :
+7. 如果安装顺利, 你将看到:
 
    ```text
    Installation complete.
    ```
 
-8. Depuis le menu « Activities », vous pouvez désormais rechercher et exécuter OBS Studio.
+8. 在 "Activities" 菜单, 可以搜索并运行 OBS Studio.
 
-## Liste des Paquets
+## 列出安装包
 
-Pour voir les installations Flatpak dont vous disposez sur votre système, ouvrez un terminal et utilisez cette commande :
+要想查看 Flatpak 在你系统上的安装包, 打开终端并执行如下命令:
 
 ```bash
 flatpak list
 ```
 
-qui vous montrera un résultat tel que celui-ci :
+输出结果类似下面这种:
 
 ```text
 Name                                    Application ID                                  Version   Branch       Installation
@@ -246,22 +245,22 @@ QGnomePlatform                          org.kde.PlatformTheme.QGnomePlatform    
 QAdwaitaDecorations                     org.kde.WaylandDecoration.QAdwaitaDecorations             6.6          system
 ```
 
-## Mise à Jour des Paquets
+## 更新软件包
 
-Pour mettre à jour un package vers la dernière version, utilisez « l'ID d'application » de la sortie « flatpak list » :
+要想将某个包更新到最新版本, 需要用到 `flatpak list` 命令中输出的 "Application ID" 那一列对应包的值:
 
 ```bash
 flatpak update com.obsproject.Studio
 ```
 
-## Suppression de paquets
+## 删除软件包
 
-Pour désinstaller un package, utilisez l'« ID d'application » de la sortie « flatpak list » :
+要想将某个包卸载, 也需要用到 flatpak list 命令中输出的 "Application ID" 那一列对应包的值:
 
 ```bash
 flatpak uninstall com.obsproject.Studio
 ```
 
-## Conclusion
+## 总结
 
-Vous pouvez utiliser Flathub et Flatpak pour remplir facilement votre bureau GNOME avec des applications, des jeux aux outils de productivité.
+你可以使用Flathaub和Flatpak轻松地开发GNOME桌面相关的应用程序, 从游戏到生产力工具都可以。
